@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login - BlogSite</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(31, 41, 55, 0.8);
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-align: center;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        p.subtitle {
+            color: #9ca3af;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 24px 0 16px 0;
+            text-align: center;
+            color: white;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #d1d5db;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #374151;
+            border-radius: 6px;
+            box-sizing: border-box;
+            background: rgba(17, 24, 39, 0.5);
+            color: white;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #374151;
+            margin: 24px 0;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 16px;
+            color: #9ca3af;
+        }
+        .login-link a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- <% if (typeof message !== "undefined") { %>
+        <script>
+            alert("<%= message %>");
+        </script>
+        <% } %> -->
+
+        <h1>BlogSite</h1>
+        <p class="subtitle">Share your thoughts with the world through your words</p>
+        
+        <h2>Login to Your Account</h2>
+        <form action="/login" method="post">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Your email" required />
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Your password" required />
+            
+            <hr />
+            <button type="submit">Login</button>
+
+            <div class="login-link">
+                Don't have an account? <a href="/register">Create one</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
