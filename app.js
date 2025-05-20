@@ -15,9 +15,10 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname,'public')))
 app.use(cookieParser());
 
-app.get("/",(req,res)=>{
+app.get("/register",(req,res)=>{
     res.render("index")
 })
+
 //Registeration
 app.post("/register",async(req,res)=>{
     let {email,username,name,password,age} =req.body;
@@ -40,6 +41,7 @@ app.post("/register",async(req,res)=>{
         })
     })
 })
+
 //login
 app.get("/login",(req,res)=>{
     res.render("login")
@@ -61,13 +63,20 @@ app.post("/login",async(req,res)=>{
     })
     
 })
+
 //Profile
 app.get("/profile",isLoggedIn,async(req,res)=>{
     let user = await userModel.findOne({email: req.user.email}).populate("posts")
-        res.render("profile",{user})
+    res.render("profile",{user})
 })
 
+//Logout
+app.get("/logout",(req,res)=>{
+    res.cookie("token","");
+    res.redirect("/login")
+})
 
+//session function
 function isLoggedIn(req, res, next) {
     const token = req.cookies.token;
     // If no token, redirect immediately
