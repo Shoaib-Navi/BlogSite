@@ -18,29 +18,7 @@ app.use(cookieParser());
 app.get("/",(req,res)=>{
     res.render("index")
 })
-
-app.get("/login",(req,res)=>{
-    res.render("login")
-})
-
-app.post("/login",async(req,res)=>{
-    let {email,password} =req.body;
-
-    let user =await userModel.findOne({email});
-    if(!user) return res.status(400).send("Something went wrong!");
-
-    bcrypt.compare(password,user.password,(err,result)=>{
-        if(result){
-            let token = jwt.sign({email:email,userid:user._id},"shhhh");
-            res.cookie("token",token);
-            res.status(200).redirect("/profile")
-        }else{
-            res.redirect("/login")
-        }
-    })
-    
-})
-
+//Registeration
 app.post("/register",async(req,res)=>{
     let {email,username,name,password,age} =req.body;
 
@@ -62,5 +40,51 @@ app.post("/register",async(req,res)=>{
         })
     })
 })
+//login
+app.get("/login",(req,res)=>{
+    res.render("login")
+})
+app.post("/login",async(req,res)=>{
+    let {email,password} =req.body;
+
+    let user =await userModel.findOne({email});
+    if(!user) return res.status(400).send("Something went wrong!");
+
+    bcrypt.compare(password,user.password,(err,result)=>{
+        if(result){
+            let token = jwt.sign({email:email,userid:user._id},"shhhh");
+            res.cookie("token",token);
+            res.status(200).redirect("/profile")
+        }else{
+            res.redirect("/login")
+        }
+    })
+    
+})
+//Profile
+app.get("/profile",isLoggedIn,async(req,res)=>{
+    let user = await userModel.findOne({email: req.user.email}).populate("posts")
+        res.render("profile",{user})
+})
+
+
+function isLoggedIn(req, res, next) {
+    const token = req.cookies.token;
+    // If no token, redirect immediately
+    if (!token) {
+        res.redirect("/login");
+        return;
+    }
+    // Try to verify the token
+    jwt.verify(token, "shhhh", (err, decoded) => {
+        if (err) {
+            res.redirect("/login");
+            return;
+        }
+        req.user = decoded;
+        next();
+    });
+}
+
 
 app.listen(3000)
