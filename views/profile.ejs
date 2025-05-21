@@ -1,117 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>User Profile - BlogSite</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-    }
-    .container {
-      max-width: 600px;
-      width: 100%;
-      background: rgba(31, 41, 55, 0.8);
-      border-radius: 12px;
-      padding: 32px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    h1 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      text-align: center;
-      background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    p.subtitle {
-      color: #9ca3af;
-      text-align: center;
-      margin-bottom: 32px;
-    }
-    h2 {
-      font-size: 20px;
-      font-weight: 600;
-      margin: 24px 0 16px 0;
-      text-align: center;
-      color: white;
-    }
-    .profile-info {
-      margin-bottom: 16px;
-    }
-    .label {
-      font-weight: 500;
-      color: #d1d5db;
-      margin-bottom: 4px;
-    }
-    .value {
-      background: rgba(17, 24, 39, 0.5);
-      padding: 10px;
-      border: 1px solid #374151;
-      border-radius: 6px;
-      color: #f3f4f6;
-    }
-    button {
-      width: 100%;
-      margin-top: 24px;
-      padding: 12px;
-      background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>BlogSite</h1>
-    <p class="subtitle">Welcome to your profile</p>
-
-    <h2>User Profile</h2>
-
-    <div class="profile-info">
-      <div class="label">Name</div>
-      <div class="value">
-        <%= user.name %>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+     
+    <div class="w-full min-h-screen bg-zinc-900 text-white p-10 pt-0 mt-0">
+      <!-- BlogSite Logo & Subtitle -->
+    <div class="w-full flex flex-col items-center justify-center">
+      <h1 class="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 leading-relaxed mt-0">
+        BlogSite
+      </h1>
+      <p class="text-1xl text-zinc-400">Welcome to your profile</p>
     </div>
 
-    <div class="profile-info">
-      <div class="label">Username</div>
-      <div class="value">
-        <%= user.username %>
-    </div>
-    </div>
+      <div class="w-full flex justify-end">
+        <a
+          href="/logout"
+          class="bg-red-500 rounded-md px-3 py-2 text-sm mb-5 inline-block"
+          >Logout</a
+        >
+      </div>
 
-    <div class="profile-info">
-      <div class="label">Email</div>
-      <div class="value">
-        <%= user.email %>
-    </div>
-    </div>
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-md overflow-hidden">
+          <img class="w-full h-full object-cover" src="/images/uploads/<%= user.profilepic %>" alt="">
+        </div>
+        <h3 class="text-3xl mb-5">
+          <span class="font-light">Hello, </span><%= user.name %>
+        </h3>
+      </div>
 
-    <div class="profile-info">
-      <div class="label">Age</div>
-      <div class="value">
-        <%= user.age %>
-    </div>
-    </div>
+      <h5 class="mb-5">You can create a new post.</h5>
 
-    <form action="/logout" method="get">
-      <button type="submit">Logout</button>
-    </form>
-  </div>
-</body>
+      <form action="/post" method="post">
+        <textarea
+          placeholder="What's on your mind ?"
+          class="block p-3 outline-none w-1/2 resize-none bg-transparent border-2 border-zinc-800 rounded-md"
+          name="content"
+        ></textarea>
+        <input
+          class="px-3 py-2 w-40 text-sm rounded-md bg-blue-500 block mt-2"
+          type="submit"
+          value="Create New Post"
+        />
+      </form>
+
+      <div class="posts mt-20">
+        <h3 class="text-zinc-400 mb-4">Your Posts</h3>
+        
+        <!-- Updated Grid Layout -->
+        <div class="postcontainer grid grid-cols-1 md:grid-cols-2 gap-6">
+          <% user.posts.reverse().forEach(function(post){ %>
+            <div class="post p-6 border border-zinc-700 rounded-xl bg-zinc-800 shadow-md">
+              
+              <!-- User Info -->
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-full overflow-hidden">
+                  <img class="w-full h-full object-cover" src="/images/uploads/<%= user.profilepic %>" alt="">
+                </div>
+                <h4 class="text-lg font-semibold text-blue-400">@<%= user.username %></h4>
+              </div>
+
+              <!-- Post Content Preview -->
+              <p class="text-sm tracking-tight mb-3">
+                <%= post.content.length > 150 ? post.content.substring(0, 150) + "..." : post.content %>
+              </p>
+
+              <!-- Read More Link -->
+              <a href="/post/<%= post._id %>" class="text-sm text-blue-400 hover:underline">Read More</a>
+
+              <!-- Like / Dislike / Edit Buttons -->
+              <div class="mt-4 flex items-center justify-between text-sm">
+                <div class="flex gap-4">
+                  <a href="/like/<%= post._id %>" class="text-blue-500 hover:underline">
+                    <%= post.likes.indexOf(user._id) === -1 ? "Like" : "Unlike" %>
+                  </a>
+                  <a href="/dislike/<%= post._id %>" class="text-red-400 hover:underline">
+                    <%= post.dislikes && post.dislikes.indexOf(user._id) === -1 ? "Dislike" : "Undislike" %>
+                  </a>
+                  <a href="/edit/<%= post._id %>" class="text-zinc-400 hover:underline">Edit</a>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

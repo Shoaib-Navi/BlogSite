@@ -15,9 +15,19 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname,'public')))
 app.use(cookieParser());
 
+//Home Page
+app.get('/',async(req,res)=>{
+    const posts = await postModel.find({})
+        .populate('user')
+        .exec();
+
+    //shuffle posts randomly
+    const shuffled = posts.sort(()=> Math.random() - 0.5);
+    res.render('home',{allPosts: shuffled})
+})
 
 //Registeration
-app.get("/",(req,res)=>{
+app.get("/register",(req,res)=>{
     res.render("index")
 })
 app.post("/register",async(req,res)=>{
@@ -96,4 +106,4 @@ function isLoggedIn(req, res, next) {
 }
 
 
-app.listen(3000)
+app.listen(8080)
