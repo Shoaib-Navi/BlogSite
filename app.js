@@ -15,11 +15,11 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname,'public')))
 app.use(cookieParser());
 
-app.get("/register",(req,res)=>{
-    res.render("index")
-})
 
 //Registeration
+app.get("/",(req,res)=>{
+    res.render("index")
+})
 app.post("/register",async(req,res)=>{
     let {email,username,name,password,age} =req.body;
 
@@ -90,7 +90,7 @@ function isLoggedIn(req, res, next) {
             res.redirect("/login");
             return;
         }
-        req.user = decoded;
+        req.user = decoded;  // decoded has userid & email
         next();
     });
 }
