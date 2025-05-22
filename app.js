@@ -133,6 +133,17 @@ app.get("/like/:id",isLoggedIn,async(req,res)=>{
 })
 
 
+//update
+app.get("/edit/:id",isLoggedIn,async(req,res)=>{
+    let post = await postModel.findOne({_id:req.params.id}).populate("user")
+    res.render("edit",{post})
+})
+
+app.post("/update/:id",isLoggedIn,async(req,res)=>{
+    let post= await postModel.findOneAndUpdate({_id:req.params.id},{content:req.body.content})
+    res.redirect("/profile");
+})
+
 //Logout
 app.get("/logout",(req,res)=>{
     res.cookie("token","");
