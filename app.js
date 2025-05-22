@@ -5,8 +5,10 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const cookieParser = require("cookie-parser")
+const multer = require('multer');
 const userModel = require("./models/user")
 const postModel = require("./models/post")
+const upload = require("./config/multerconfig");
 
 
 app.set("view engine", "ejs")
@@ -25,7 +27,7 @@ app.get('/',async(req,res)=>{
 
     //shuffle posts randomly
     const shuffled = posts.sort(()=> Math.random() - 0.5);
-    
+
     res.render('home',{allPosts: shuffled})
 })
 
@@ -90,6 +92,17 @@ app.post("/login",async(req,res)=>{
 app.get("/profile",isLoggedIn,async(req,res)=>{
     let user = await userModel.findOne({email: req.user.email}).populate("posts")
     res.render("profile",{user})
+})
+
+app.get("/profile/upload",(req,res)=>{
+    res.render('profileupload')
+})
+
+app.post("/upload",isLoggedIn,upload.single('image'),async(req,res)=>{
+    let user = await userModel.findOne({email:req.user.email})
+    user.profilepic = req.file.filename;
+    await user.save();
+    res.redirect("/profile")
 })
 
 
