@@ -16,15 +16,21 @@ app.use(express.static(path.join(__dirname,'public')))
 app.use(cookieParser());
 
 //Home Page
+// .exec() actually executes the query and returns a Promise.
 app.get('/',async(req,res)=>{
-    const posts = await postModel.find({})
+    const posts = await postModel.find({})  //{} means everything
         .populate('user')
-        .exec();
+        .exec();  //this is used to return a promise and you have the option to use it or not
+                  //as mongoose is very smart it do the work without using it 
 
     //shuffle posts randomly
     const shuffled = posts.sort(()=> Math.random() - 0.5);
+    
     res.render('home',{allPosts: shuffled})
 })
+
+
+
 
 //Registeration
 app.get("/register",(req,res)=>{
@@ -52,6 +58,9 @@ app.post("/register",async(req,res)=>{
     })
 })
 
+
+
+
 //login
 app.get("/login",(req,res)=>{
     res.render("login")
@@ -74,17 +83,26 @@ app.post("/login",async(req,res)=>{
     
 })
 
+
+
+
 //Profile
 app.get("/profile",isLoggedIn,async(req,res)=>{
     let user = await userModel.findOne({email: req.user.email}).populate("posts")
     res.render("profile",{user})
 })
 
+
+
 //Logout
 app.get("/logout",(req,res)=>{
     res.cookie("token","");
     res.redirect("/login")
 })
+
+
+
+
 
 //session function
 function isLoggedIn(req, res, next) {
