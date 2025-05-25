@@ -19,18 +19,56 @@ app.use(cookieParser());
 
 //Home Page
 // .exec() actually executes the query and returns a Promise.
-app.get('/',async(req,res)=>{
-    const posts = await postModel.find({})  //{} means everything
-        .populate('user')
-        .exec();  //this is used to return a promise and you have the option to use it or not
-                  //as mongoose is very smart it do the work without using it 
+// app.get('/',async(req,res)=>{
+//     const posts = await postModel.find({})  //{} means everything
+//         .populate('user')
+//         .exec();  //this is used to return a promise and you have the option to use it or not
+//                   //as mongoose is very smart it do the work without using it 
 
-    //shuffle posts randomly
-    const shuffled = posts.sort(()=> Math.random() - 0.5);
+//     //shuffle posts randomly
+//     const shuffled = posts.sort(()=> Math.random() - 0.5);
 
-    res.render('home',{allPosts: shuffled})
-})
+//     res.render('home',{allPosts: shuffled})
+// })
 
+//pagination
+app.get('/', async (req, res) => {
+  const page = parseInt(req.query.page) || 1; // current page
+  const limit = 8; // posts per page
+
+  try {
+    //search bar to stay with text which i search
+    const searchQuery = req.query.search || '';
+    let users = [];
+
+    if (searchQuery) {
+      users = await userModel.find({
+      username: { $regex: searchQuery, $options: 'i' },
+     });
+    }
+
+    const totalPosts = await postModel.countDocuments({});
+    const totalPages = Math.ceil(totalPosts / limit);
+
+    const posts = await postModel.find({})
+      .populate('user')
+      .sort({ _id: -1 }) // latest posts first
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .exec();
+
+    res.render('home', {
+      allPosts: posts,
+      currentPage: page,
+      totalPages,
+      searchQuery: query ,
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Something went wrong while loading posts.");
+  }
+});
 
 
 
