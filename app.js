@@ -30,45 +30,45 @@ app.use(cookieParser());
 
 //     res.render('home',{allPosts: shuffled})
 // })
-
+ 
 //pagination
-app.get('/', async (req, res) => {
-  const page = parseInt(req.query.page) || 1; // current page
-  const limit = 8; // posts per page
+// app.get('/', async (req, res) => {
+//   const page = parseInt(req.query.page) || 1; // current page
+//   const limit = 8; // posts per page
 
-  try {
-    //search bar to stay with text which i search
-    const searchQuery = req.query.search || '';
-    let users = [];
+//   try {
+//     //search bar to stay with text which i search
+//     const searchQuery = req.query.search || '';
+//     let users = [];
 
-    if (searchQuery) {
-      users = await userModel.find({
-      username: { $regex: searchQuery, $options: 'i' },
-     });
-    }
+//     if (searchQuery) {
+//       users = await userModel.find({
+//       username: { $regex: searchQuery, $options: 'i' },
+//      });
+//     }
 
-    const totalPosts = await postModel.countDocuments({});
-    const totalPages = Math.ceil(totalPosts / limit);
+//     const totalPosts = await postModel.countDocuments({});
+//     const totalPages = Math.ceil(totalPosts / limit);
 
-    const posts = await postModel.find({})
-      .populate('user')
-      .sort({ _id: -1 }) // latest posts first
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .exec();
+//     const posts = await postModel.find({})
+//       .populate('user')
+//       .sort({ _id: -1 }) // latest posts first
+//       .skip((page - 1) * limit)
+//       .limit(limit)
+//       .exec();
 
-    res.render('home', {
-      allPosts: posts,
-      currentPage: page,
-      totalPages,
-      searchQuery: query ,
-    });
+//     res.render('home', {
+//       allPosts: posts,
+//       currentPage: page,
+//       totalPages,
+//       searchQuery: query ,
+//     });
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Something went wrong while loading posts.");
-  }
-});
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Something went wrong while loading posts.");
+//   }
+// });
 
 
 
