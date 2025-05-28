@@ -71,36 +71,36 @@ app.use(cookieParser());
 // });
 
 //2.search type
-// app.get('/search', async (req, res) => {
-//   const query = req.query.query;
+app.get('/search', async (req, res) => {
+  const query = req.query.query;
 
-//   try {
-//     // Step 1: Find users with matching username
-//     const matchedUsers = await userModel.find({
-//       username: { $regex: query, $options: 'i' }
-//     });
+  try {
+    // Step 1: Find users with matching username
+    const matchedUsers = await userModel.find({
+      username: { $regex: query, $options: 'i' }
+    });
 
-//     const userIds = matchedUsers.map(user => user._id);
+    const userIds = matchedUsers.map(user => user._id);
 
-//     // Step 2: Find posts either by content or user
-//     const posts = await postModel.find({
-//       $or: [
-//         { content: { $regex: query, $options: 'i' } },
-//         { user: { $in: userIds } }
-//       ]
-//     }).populate('user');
+    // Step 2: Find posts either by content or user
+    const posts = await postModel.find({
+      $or: [
+        { content: { $regex: query, $options: 'i' } },
+        { user: { $in: userIds } }
+      ]
+    }).populate('user');
 
-//     res.render('home', {
-//       allPosts: posts,
-//       currentPage: 1,
-//       totalPages: 1
-//     });
+    res.render('home', {
+      allPosts: posts,
+      currentPage: 1,
+      totalPages: 1
+    });
 
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Server Error");
-//   }
-// });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+});
 
 
 //Registeration
