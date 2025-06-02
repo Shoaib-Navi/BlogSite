@@ -7,11 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-zinc-900 text-white min-h-screen">
+
+
     <!-- Header -->
     <header class="text-center py-10">
       <h1 class="text-4xl font-bold text-blue-400">BlogSite</h1>
       <p class="text-zinc-400 text-lg mt-2">Read, Write & Share Thoughts With the World</p>
     </header>
+
+
 
     <!-- search bar-->
            <form action="/search" method="GET" class="w-full max-w-xl flex" onsubmit="showLoading(), setTimeout(() => {}, 5000)">
@@ -32,12 +36,16 @@
   </button>
 </form>
 
+
+
     <!-- Posts Section -->
     <div class="max-w-6xl mx-auto px-6 pb-20">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <% allPosts.forEach(function(post) { %>
           <div class="p-6 border border-zinc-700 rounded-xl bg-zinc-800 shadow-md">
             
+
+
             <!-- User Info -->
             <div class="flex items-center gap-3 mb-3">
               <div class="w-10 h-10 rounded-full overflow-hidden">
@@ -46,14 +54,20 @@
               <h4 class="text-lg font-semibold text-blue-400">@<%= post.user.username %></h4>
             </div>
 
+
+
             <!-- Post Content Preview -->
             <p class="text-sm tracking-tight mb-3">
               <%= post.content.length > 150 ? post.content.substring(0, 150) + "..." : post.content %>
             </p>
 
+
+
             <!-- Read More Link -->
             <a href="/post/<%= post._id %>" class="text-sm text-blue-400 hover:underline">Read More</a>
 
+
+            
             <!-- Like / Dislike -->
             <div class="mt-4 flex items-center justify-between text-sm">
               <div class="flex gap-4">
